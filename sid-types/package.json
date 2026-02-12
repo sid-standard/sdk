@@ -1,0 +1,28 @@
+{
+  "name": "@sid-standard/types",
+  "version": "1.0.0",
+  "description": "TypeScript type definitions for the SID (Semantic Interaction Description) standard",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts",
+    "src/**/*.d.ts"
+  ],
+  "keywords": [
+    "sid",
+    "semantic-interaction-description",
+    "typescript",
+    "types",
+    "ai-agents",
+    "web-accessibility"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": ""
+}

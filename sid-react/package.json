@@ -1,0 +1,33 @@
+{
+  "name": "@sid-standard/react",
+  "version": "1.0.0",
+  "description": "React/JSX type augmentations for SID data-sid-* attributes",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts"
+  ],
+  "peerDependencies": {
+    "@sid-standard/types": "^1.0.0",
+    "react": "^17.0.0 || ^18.0.0"
+  },
+  "keywords": [
+    "sid",
+    "semantic-interaction-description",
+    "typescript",
+    "types",
+    "react",
+    "jsx",
+    "ai-agents",
+    "web-accessibility"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": ""
+}

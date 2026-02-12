@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SID Runtime - UMD Example</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .debug-panel {
+      margin-top: 30px;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 4px;
+    }
+    .debug-panel h3 {
+      margin-top: 0;
+    }
+    pre {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- SID Context Metadata -->
+  <script type="application/sid+json">
+    {
+      "version": "1.0.0",
+      "app": "Demo Application - A sample app demonstrating SID integration",
+      "page": "Contact Form - Submit inquiries and feedback",
+      "auth": "No authentication required for this demo"
+    }
+  </script>
+
+  <h1>SID Runtime UMD Example</h1>
+  <p>This example demonstrates using the SID runtime via a script tag (UMD build).</p>
+
+  <form id="contact-form">
+    <!-- Text Input with SID attributes -->
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input 
+        type="text" 
+        id="name"
+        data-sid="name-input"
+        data-sid-desc="Enter your full name"
+        data-sid-action="fill"
+        data-sid-input="text,required"
+        placeholder="John Doe"
+      >
+    </div>
+
+    <!-- Email Input -->
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input 
+        type="email" 
+        id="email"
+        data-sid="email-input"
+        data-sid-desc="Enter your email address for contact"
+        data-sid-desc-long="We'll use this email to respond to your inquiry. Your email will not be shared with third parties."
+        data-sid-action="fill"
+        data-sid-input="email,required"
+        placeholder="john@example.com"
+      >
+    </div>
+
+    <!-- Select Dropdown -->
+    <div class="form-group">
+      <label for="subject">Subject</label>
+      <select 
+        id="subject"
+        data-sid="subject-select"
+        data-sid-desc="Select the subject of your inquiry"
+        data-sid-action="select"
+        data-sid-options="General Inquiry,Technical Support,Sales,Feedback"
+      >
+        <option value="">-- Select a subject --</option>
+        <option value="General Inquiry">General Inquiry</option>
+        <option value="Technical Support">Technical Support</option>
+        <option value="Sales">Sales</option>
+        <option value="Feedback">Feedback</option>
+      </select>
+    </div>
+
+    <!-- Textarea -->
+    <div class="form-group">
+      <label for="message">Message</label>
+      <textarea 
+        id="message"
+        rows="4"
+        data-sid="message-input"
+        data-sid-desc="Enter your message or question"
+        data-sid-action="fill"
+        data-sid-input="text,required"
+        placeholder="Type your message here..."
+      ></textarea>
+    </div>
+
+    <!-- Checkbox -->
+    <div class="form-group">
+      <label>
+        <input 
+          type="checkbox" 
+          id="newsletter"
+          data-sid="newsletter-checkbox"
+          data-sid-desc="Subscribe to our newsletter"
+          data-sid-action="check"
+        >
+        Subscribe to newsletter
+      </label>
+    </div>
+
+    <!-- Submit Button with tracking -->
+    <div class="form-group">
+      <button 
+        type="submit"
+        data-sid="submit-button"
+        data-sid-desc="Submit the contact form"
+        data-sid-action="click"
+        data-sid-tracking="async"
+      >
+        Submit Form
+      </button>
+    </div>
+
+    <!-- Disabled Button Example -->
+    <div class="form-group">
+      <button 
+        type="button"
+        disabled
+        data-sid="premium-button"
+        data-sid-desc="Access premium features"
+        data-sid-action="click"
+        data-sid-disabled="true"
+        data-sid-disabled-desc="Premium features require a subscription"
+      >
+        Premium Features (Disabled)
+      </button>
+    </div>
+  </form>
+
+  <!-- Debug Panel -->
+  <div class="debug-panel">
+    <h3>SID Debug Panel</h3>
+    <button id="discover-btn">Discover Elements</button>
+    <button id="context-btn">Show Context</button>
+    <pre id="output">Click a button to see SID data...</pre>
+  </div>
+
+  <!-- Include the UMD build -->
+  <script src="../dist/index.umd.js"></script>
+  
+  <script>
+    // Initialize the SID runtime using the global SIDRuntime object
+    const sid = SIDRuntime.init({
+      observeDOM: true
+    });
+
+    console.log('SID Runtime initialized:', sid.version);
+    console.log('SID supported:', sid.isSupported());
+
+    const output = document.getElementById('output');
+
+    // Discover Elements button
+    document.getElementById('discover-btn').addEventListener('click', () => {
+      const elements = sid.getElements();
+      output.textContent = JSON.stringify(elements, null, 2);
+    });
+
+    // Show Context button
+    document.getElementById('context-btn').addEventListener('click', () => {
+      const context = {
+        app: sid.getAppContext(),
+        page: sid.getPageContext(),
+        version: sid.version
+      };
+      output.textContent = JSON.stringify(context, null, 2);
+    });
+
+    // Handle form submission with SID interaction
+    document.getElementById('contact-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Demonstrate programmatic interaction
+      const result = await sid.interact('submit-button', { type: 'click' });
+      
+      if (result.success && result.operation) {
+        output.textContent = `Form submitted!\nOperation ID: ${result.operation.id}\nTracking: ${result.operation.tracking.type}`;
+        
+        // Simulate operation completion after 1 second
+        setTimeout(() => {
+          // In a real app, the backend would complete the operation
+          output.textContent += '\n\nOperation completed (simulated)';
+        }, 1000);
+      } else {
+        output.textContent = `Interaction result:\n${JSON.stringify(result, null, 2)}`;
+      }
+    });
+
+    // Example: Programmatically fill a field
+    async function demoFillField() {
+      const result = await sid.interact('email-input', {
+        type: 'fill',
+        value: 'demo@example.com'
+      });
+      console.log('Fill result:', result);
+    }
+
+    // Example: Programmatically select an option
+    async function demoSelectOption() {
+      const result = await sid.interact('subject-select', {
+        type: 'select',
+        value: 'Technical Support'
+      });
+      console.log('Select result:', result);
+    }
+
+    // Example: Get a specific element
+    function demoGetElement() {
+      const element = sid.getElement('email-input');
+      if (element) {
+        console.log('Element found:', element);
+        console.log('Description:', element.description);
+        console.log('Actions:', element.actions);
+      }
+    }
+
+    // Expose demo functions globally for console testing
+    window.demoFillField = demoFillField;
+    window.demoSelectOption = demoSelectOption;
+    window.demoGetElement = demoGetElement;
+
+    console.log('Demo functions available: demoFillField(), demoSelectOption(), demoGetElement()');
+  </script>
+</body>
+</html>
